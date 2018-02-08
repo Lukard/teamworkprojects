@@ -1,11 +1,11 @@
-package com.rubenabad.teamworkprojects
+package com.rubenabad.teamworkprojects.repository
 
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.rubenabad.teamworkprojects.api.ProjectsApi
 import com.rubenabad.teamworkprojects.data.Project
 import com.rubenabad.teamworkprojects.data.ProjectsResponse
-import com.rubenabad.teamworkprojects.repository.ProjectsRepository
+import com.rubenabad.teamworkprojects.repository.ProjectsRepositoryImpl
 import io.reactivex.Single
 import io.reactivex.subscribers.TestSubscriber
 import org.hamcrest.core.Is.`is`
@@ -14,11 +14,9 @@ import org.junit.Test
 
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * This class is meant to test the possibles scenarios that the @see ProjectsRepository may face
  */
-class ExampleUnitTest {
+class ProjectsRepositoryUnitTest {
 
     private val okCall = Single.just(
             ProjectsResponse("OK", listOf(
@@ -43,7 +41,7 @@ class ExampleUnitTest {
         }
 
         val testSubscriber: TestSubscriber<List<Project>> = TestSubscriber()
-        val repository = ProjectsRepository(projectsMock)
+        val repository = ProjectsRepositoryImpl(projectsMock)
         repository.getProjects().subscribe(testSubscriber)
 
         testSubscriber.assertComplete()
@@ -64,7 +62,7 @@ class ExampleUnitTest {
         }
 
         val testSubscriber: TestSubscriber<List<Project>> = TestSubscriber()
-        val repository = ProjectsRepository(projectsMock)
+        val repository = ProjectsRepositoryImpl(projectsMock)
         repository.getProjects().subscribe(testSubscriber)
 
         testSubscriber.assertComplete()
@@ -106,7 +104,7 @@ class ExampleUnitTest {
         }
 
         val testSubscriber: TestSubscriber<List<Project>> = TestSubscriber()
-        val repository = ProjectsRepository(projectsMock)
+        val repository = ProjectsRepositoryImpl(projectsMock)
         repository.getProjects().subscribe(testSubscriber)
 
         testSubscriber.assertError(exception)

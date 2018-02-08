@@ -5,11 +5,11 @@ import com.rubenabad.teamworkprojects.data.Project
 import io.reactivex.Flowable
 import io.reactivex.Single
 
-class ProjectsRepository(private val projectsApi: ProjectsApi) {
+class ProjectsRepositoryImpl(private val projectsApi: ProjectsApi) : ProjectsRepository {
 
     private var cache = emptyList<Project>()
 
-    fun getProjects(): Flowable<List<Project>> {
+    override fun getProjects(): Flowable<List<Project>> {
         return if (cache.isEmpty()) {
             projectsApi
                     .getProjects()
@@ -31,4 +31,10 @@ class ProjectsRepository(private val projectsApi: ProjectsApi) {
                     )
         }
     }
+}
+
+interface ProjectsRepository {
+
+    fun getProjects(): Flowable<List<Project>>
+
 }

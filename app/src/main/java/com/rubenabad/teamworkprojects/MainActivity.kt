@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.rubenabad.teamworkprojects.api.ProjectsApi
-import com.rubenabad.teamworkprojects.repository.ProjectsRepository
+import com.rubenabad.teamworkprojects.repository.ProjectsRepositoryImpl
 import com.rubenabad.teamworkprojects.utils.Base64Coder
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 .client(client)
                 .build()
 
-        val repository = ProjectsRepository(retrofit.create(ProjectsApi::class.java))
+        val repository = ProjectsRepositoryImpl(retrofit.create(ProjectsApi::class.java))
 
         repository
                 .getProjects()
