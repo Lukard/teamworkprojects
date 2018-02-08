@@ -28,6 +28,7 @@ dependencies {
     // Library versions
     ext.appcompat_version = "27.0.2"
     ext.constraintlayout_version = "1.0.2"
+    ext.viewmodel_livedata_version = "1.1.0"
     ext.retrofit_version = "2.3.0"
     ext.room_version = "1.0.0"
     ext.rxjava_version = "2.1.9"
@@ -50,6 +51,9 @@ dependencies {
     // Constraint Layout
     implementation "com.android.support.constraint:constraint-layout:$constraintlayout_version"
 
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:$viewmodel_livedata_version"
+
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
@@ -60,7 +64,7 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$room_version"
     implementation "android.arch.persistence.room:rxjava2:$room_version"
 
-    //  RXAndroid, RXJava and RXKotlin 2 (Kotlin binders for RXJava 2)
+    // RXAndroid, RXJava and RXKotlin 2 (Kotlin binders for RXJava 2)
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
