@@ -25,37 +25,51 @@ android {
 }
 
 dependencies {
+    // Library versions
+    ext.appcompat_version = "27.0.2"
+    ext.constraintlayout_version = "1.0.2"
+    ext.retrofit_version = "2.3.0"
+    ext.room_version = "1.0.0"
+    ext.rxjava_version = "2.1.9"
+    ext.rxandroid_version = "2.0.1"
+    ext.rxkotlin_version = "2.2.0"
+    ext.junit_version = "4.12"
+    ext.runner_version = "1.0.1"
+    ext.espresso_version = "3.0.1"
+    ext.mockito_version = "2.13.0"
+    ext.mockitokotlin_version = "1.5.0"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Kotlin
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
     // AppCompat
-    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation "com.android.support:appcompat-v7:$appcompat_version"
 
     // Constraint Layout
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation "com.android.support.constraint:constraint-layout:$constraintlayout_version"
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
     // Room (for database storage, so we don't have to be always online)
-    implementation "android.arch.persistence.room:runtime:1.0.0"
-    kapt "android.arch.persistence.room:compiler:1.0.0"
-    implementation "android.arch.persistence.room:rxjava2:1.0.0"
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    kapt "android.arch.persistence.room:compiler:$room_version"
+    implementation "android.arch.persistence.room:rxjava2:$room_version"
 
-    // RXKotlin 2 (Kotlin binders for RXJava 2), RXAndroid and RXJava
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation "io.reactivex.rxjava2:rxjava:2.1.9"
+    //  RXAndroid, RXJava and RXKotlin 2 (Kotlin binders for RXJava 2)
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 
     // Test
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    testImplementation "android.arch.persistence.room:testing:1.0.0"
-    androidTestImplementation 'org.mockito:mockito-android:2.13.0'
-    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "com.android.support.test:runner:$runner_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
+    testImplementation "android.arch.persistence.room:testing:$room_version"
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockitokotlin_version"
 }
