@@ -39,6 +39,7 @@ dependencies {
     ext.espresso_version = "3.0.1"
     ext.mockito_version = "2.13.0"
     ext.mockitokotlin_version = "1.5.0"
+    ext.koin_version = '0.8.2'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -53,6 +54,10 @@ dependencies {
 
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:$viewmodel_livedata_version"
+
+    // Koin (for dependency injection, if you are familiar with dagger you must give it a try)
+    implementation "org.koin:koin-android-architecture:$koin_version"
+    testCompile "org.koin:koin-test:$koin_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
