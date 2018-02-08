@@ -1,9 +1,10 @@
-package com.rubenabad.teamworkprojects
+package com.rubenabad.teamworkprojects.view
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.rubenabad.teamworkprojects.R
 import com.rubenabad.teamworkprojects.viewmodel.ProjectListViewModel
 import org.koin.android.architecture.ext.viewModel
 
