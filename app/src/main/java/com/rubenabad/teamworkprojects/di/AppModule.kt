@@ -1,5 +1,6 @@
 package com.rubenabad.teamworkprojects.di
 
+import com.rubenabad.teamworkprojects.BuildConfig
 import com.rubenabad.teamworkprojects.api.ProjectsApi
 import com.rubenabad.teamworkprojects.repository.ProjectsRepository
 import com.rubenabad.teamworkprojects.repository.ProjectsRepositoryImpl
@@ -23,7 +24,7 @@ val appModule = applicationContext {
 }
 
 const val teamworkURL = "https://yat.teamwork.com/"
-const val apiKey = "twp_TEbBXGCnvl2HfvXWfkLUlzx92e3T"
+val apiKey: String = BuildConfig.YakApiKey
 
 fun getAuthorization(apiKey: String) = "BASIC ${Base64Coder.encodeString("$apiKey:xxx")}"
 

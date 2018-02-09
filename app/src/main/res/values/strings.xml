@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Teamwork Projects</string>
+    <string name="unknown_project_name">Unnamed project</string>
 </resources>

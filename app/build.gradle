@@ -6,15 +6,30 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+// It is not safe to store api key raw in some file that is pushed to a public remote repository. We will
+// put the api key into ignored file local.properties. Please create an api.key field in local.properties and
+// assign your api key. For example: api.key="yourApiKey"
+def getApiKey() {
+    Properties properties = new Properties()
+    properties.load(new File(rootDir.absolutePath + "/local.properties").newDataInputStream())
+    def apiKey = properties.getProperty('api.key', null)
+    if (apiKey == null) {
+        throw new GradleException(
+                "Oh! API key is missing. Please go to your local.properties file and define an api.key")
+    }
+    return apiKey
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.rubenabad.teamworkprojects"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "YakApiKey", getApiKey()
     }
     buildTypes {
         release {
@@ -28,8 +43,10 @@ dependencies {
     // Library versions
     ext.appcompat_version = "27.0.2"
     ext.constraintlayout_version = "1.0.2"
+    ext.flowlayout_version = "1.1.0"
     ext.glide_version = "4.6.1"
     ext.glide_palette_version = "2.1.1"
+    ext.recyclerview_animations_version = "2.3.0"
     ext.viewmodel_livedata_version = "1.1.0"
     ext.retrofit_version = "2.3.0"
     ext.room_version = "1.0.0"
@@ -57,17 +74,25 @@ dependencies {
     // Constraint Layout
     implementation "com.android.support.constraint:constraint-layout:$constraintlayout_version"
 
+    // Flow layout for tags
+    implementation "com.nex3z:flow-layout:$flowlayout_version"
+
     // Glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
-    implementation "com.github.florent37:glidepalette:$glide_palette_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation ("com.github.florent37:glidepalette:$glide_palette_version") {
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+
+    // Recyclerview animators
+    implementation "jp.wasabeef:recyclerview-animators:$recyclerview_animations_version"
 
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:$viewmodel_livedata_version"
 
     // Koin (for dependency injection, if you are familiar with dagger you must give it a try)
     implementation "org.koin:koin-android-architecture:$koin_version"
-    testCompile "org.koin:koin-test:$koin_version"
+    testImplementation "org.koin:koin-test:$koin_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"

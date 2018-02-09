@@ -3,9 +3,10 @@ package com.rubenabad.teamworkprojects.repository
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.rubenabad.teamworkprojects.api.ProjectsApi
+import com.rubenabad.teamworkprojects.data.Company
 import com.rubenabad.teamworkprojects.data.Project
 import com.rubenabad.teamworkprojects.data.ProjectsResponse
-import com.rubenabad.teamworkprojects.repository.ProjectsRepositoryImpl
+import com.rubenabad.teamworkprojects.data.Tag
 import io.reactivex.Single
 import io.reactivex.subscribers.TestSubscriber
 import org.hamcrest.core.Is.`is`
@@ -19,17 +20,26 @@ import org.junit.Test
 class ProjectsRepositoryUnitTest {
 
     private val okCall = Single.just(
-            ProjectsResponse("OK", listOf(
-                    Project("Project 1", "URL 1"),
-                    Project("Project 2", "URL 2")
+            ProjectsResponse("OK",
+                    listOf(
+                            Project("Project 1", "Description 1", Company("Company 1"),
+                                    "URL 1", listOf(Tag("Tag 1", "Color 1"),
+                                    Tag("Tag 2", "Color 2"))),
+                            Project("Project 2", "Description 2", Company("Company 2"),
+                                    "URL 2", listOf(Tag("Tag 3", "Color 3"),
+                                    Tag("Tag 4", "Color 4")))
                     )
             )
     )
 
     private val secondOkCall = Single.just(
             ProjectsResponse("OK", listOf(
-                    Project("Project 3", "URL 3"),
-                    Project("Project 4", "URL 4")
+                    Project("Project 3", "Description 3", Company("Company 3"),
+                            "URL 3", listOf(Tag("Tag 5", "Color 5"),
+                            Tag("Tag 6", "Color 6"))),
+                    Project("Project 4", "Description 4", Company("Company 4"),
+                            "URL 4", listOf(Tag("Tag 7", "Color 7"),
+                            Tag("Tag 8", "Color 8")))
             )
             )
     )
@@ -58,7 +68,7 @@ class ProjectsRepositoryUnitTest {
     @Test
     fun getProjectsFromCacheAndUpdateFromWebservice() {
         val projectsMock = mock<ProjectsApi> {
-            on { getProjects() } doReturn ( listOf(okCall, secondOkCall) )
+            on { getProjects() } doReturn (listOf(okCall, secondOkCall))
         }
 
         val testSubscriber: TestSubscriber<List<Project>> = TestSubscriber()

@@ -4,7 +4,9 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
+import com.rubenabad.teamworkprojects.data.Company
 import com.rubenabad.teamworkprojects.data.Project
+import com.rubenabad.teamworkprojects.data.Tag
 import com.rubenabad.teamworkprojects.repository.ProjectsRepository
 import io.reactivex.Flowable
 import org.hamcrest.CoreMatchers.`is`
@@ -26,8 +28,12 @@ class ProjectListViewModelTest {
     private val flowableProjects = Flowable
             .just(
                     listOf(
-                            Project("Project 1", "URL 1"),
-                            Project("Project 2", "URL 2")
+                            Project("Project 1", "Description 1", Company("Company 1"),
+                                    "URL 1", listOf(Tag("Tag 1", "Color 1"),
+                                    Tag("Tag 2", "Color 2"))),
+                            Project("Project 2", "Description 2", Company("Company 2"),
+                                    "URL 2", listOf(Tag("Tag 3", "Color 3"),
+                                    Tag("Tag 4", "Color 4")))
                     )
             )
 
@@ -46,9 +52,21 @@ class ProjectListViewModelTest {
             run {
                 assertNotNull(projects)
                 assertThat(projects!![0].name, `is`("Project 1"))
+                assertThat(projects[0].description, `is`("Description 1"))
+                assertThat(projects[0].company!!.name, `is`("Company 1"))
                 assertThat(projects[0].logo, `is`("URL 1"))
+                assertThat(projects[0].tags!![0].name, `is`("Tag 1"))
+                assertThat(projects[0].tags!![0].color, `is`("Color 1"))
+                assertThat(projects[0].tags!![1].name, `is`("Tag 2"))
+                assertThat(projects[0].tags!![1].color, `is`("Color 2"))
                 assertThat(projects[1].name, `is`("Project 2"))
+                assertThat(projects[1].description, `is`("Description 2"))
+                assertThat(projects[1].company!!.name, `is`("Company 2"))
                 assertThat(projects[1].logo, `is`("URL 2"))
+                assertThat(projects[1].tags!![0].name, `is`("Tag 3"))
+                assertThat(projects[1].tags!![0].color, `is`("Color 3"))
+                assertThat(projects[1].tags!![1].name, `is`("Tag 4"))
+                assertThat(projects[1].tags!![1].color, `is`("Color 4"))
                 latch.countDown()
             }
         }

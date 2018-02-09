@@ -18,4 +18,10 @@ class ProjectListViewModel(private val repository: ProjectsRepository) : ViewMod
                 .subscribe(this::postValue)
     }
 
+    fun refresh() {
+        repository
+                .getProjects()
+                .subscribeOn(Schedulers.io())
+                .subscribe(projects::postValue)
+    }
 }
