@@ -116,6 +116,6 @@ dependencies {
     testImplementation "android.arch.persistence.room:testing:$room_version"
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
     testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockitokotlin_version"
-    testImplementation "android.arch.core:core-testing:$viewmodel_livedata_version"
+    androidTestImplementation "android.arch.core:core-testing:$viewmodel_livedata_version"
 
 }

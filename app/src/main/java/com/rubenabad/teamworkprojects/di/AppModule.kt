@@ -2,6 +2,7 @@ package com.rubenabad.teamworkprojects.di
 
 import com.rubenabad.teamworkprojects.BuildConfig
 import com.rubenabad.teamworkprojects.api.ProjectsApi
+import com.rubenabad.teamworkprojects.db.DatabaseDataSource
 import com.rubenabad.teamworkprojects.repository.ProjectsRepository
 import com.rubenabad.teamworkprojects.repository.ProjectsRepositoryImpl
 import com.rubenabad.teamworkprojects.utils.Base64Coder
@@ -20,6 +21,8 @@ val appModule = applicationContext {
     bean { ProjectsRepositoryImpl(get()) as ProjectsRepository }
 
     bean { createWebService<ProjectsApi>(teamworkURL, apiKey) }
+
+    bean { DatabaseDataSource.build(get()) }
 
 }
 
