@@ -1,9 +1,9 @@
 package com.rubenabad.teamworkprojects.repository
 
+import com.rubenabad.teamworkprojects.api.ProjectsResponse
 import com.rubenabad.teamworkprojects.api.WebserviceDatasource
 import com.rubenabad.teamworkprojects.data.Company
 import com.rubenabad.teamworkprojects.data.Project
-import com.rubenabad.teamworkprojects.data.ProjectsResponse
 import com.rubenabad.teamworkprojects.data.Tag
 import com.rubenabad.teamworkprojects.db.DatabaseDataSource
 import com.rubenabad.teamworkprojects.db.entity.ProjectEntity

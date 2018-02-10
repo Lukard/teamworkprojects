@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.rubenabad.teamworkprojects.R
+import com.rubenabad.teamworkprojects.data.Project
 import com.rubenabad.teamworkprojects.data.State
 import com.rubenabad.teamworkprojects.utils.extensions.endlessPlay
 import com.rubenabad.teamworkprojects.utils.extensions.stop
@@ -15,6 +16,7 @@ import com.rubenabad.teamworkprojects.view.adapter.ProjectAdapter
 import com.rubenabad.teamworkprojects.viewmodel.ProjectListViewModel
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.startActivity
 import org.koin.android.architecture.ext.viewModel
 
 
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         recycler.layoutManager = LinearLayoutManager(this)
-        recycler.adapter = ProjectAdapter()
+        recycler.adapter = ProjectAdapter(::onProjectClicked)
         recycler.itemAnimator = FadeInAnimator().apply {
             addDuration = 500L
             removeDuration = 500L
@@ -46,6 +48,10 @@ class MainActivity : AppCompatActivity() {
                 State.ERROR -> showError()
             }
         })
+    }
+
+    private fun onProjectClicked(project: Project) {
+        startActivity<ProjectDetailActivity>("project" to project)
     }
 
     private fun showError() {

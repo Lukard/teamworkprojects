@@ -1,20 +1,32 @@
 package com.rubenabad.teamworkprojects.data
 
-data class Tag(val name: String?, val color: String?)
+import android.os.Parcel
+import com.rubenabad.teamworkprojects.utils.KParcelable
+import com.rubenabad.teamworkprojects.utils.parcelableCreator
+import com.rubenabad.teamworkprojects.utils.readTypedObjectCompat
+import com.rubenabad.teamworkprojects.utils.writeTypedObjectCompat
 
-data class Company(val name: String?)
 
 data class Project(val name: String?, val description: String?, val company: Company?, val logo: String?,
-                   val tags: List<Tag>?)
+                   val tags: List<Tag>?) : KParcelable {
 
-data class ProjectsResponse(val STATUS: String?, val projects: List<Project>?)
+    constructor(parcel: Parcel) : this(
+            parcel.readString(),
+            parcel.readString(),
+            parcel.readTypedObjectCompat(Company.CREATOR),
+            parcel.readString(),
+            arrayListOf<Tag>().apply { parcel.readTypedList(this, Tag.CREATOR) })
 
-data class StatefulData<out T> (
-        val state: State = State.START_LOADING,
-        val data: T? = null,
-        val error: Throwable? = null
-)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeString(name)
+        writeString(description)
+        writeTypedObjectCompat(company, flags)
+        writeString(logo)
+        writeTypedList(tags)
+    }
 
-enum class State {
-    START_LOADING, END_LOADING, SUCCESS, ERROR
+    companion object {
+        @JvmField val CREATOR = parcelableCreator(::Project)
+    }
+
 }
