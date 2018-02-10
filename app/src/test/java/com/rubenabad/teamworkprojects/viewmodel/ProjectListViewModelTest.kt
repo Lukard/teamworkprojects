@@ -1,20 +1,18 @@
 package com.rubenabad.teamworkprojects.viewmodel
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.rubenabad.teamworkprojects.data.Company
 import com.rubenabad.teamworkprojects.data.Project
+import com.rubenabad.teamworkprojects.data.StatefulData
 import com.rubenabad.teamworkprojects.data.Tag
 import com.rubenabad.teamworkprojects.repository.ProjectsRepository
 import io.reactivex.Flowable
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertThat
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import java.util.concurrent.CountDownLatch
 
 
@@ -38,8 +36,8 @@ class ProjectListViewModelTest {
             )
 
     // We need this to mock the main looper and let live data post its values to the main thread
-    @get:Rule
-    val rule: TestRule = InstantTaskExecutorRule()
+//    @get:Rule
+//    val rule: TestRule = InstantTaskExecutorRule()
 
     @Test
     fun getAllProjects() {
@@ -48,25 +46,25 @@ class ProjectListViewModelTest {
         }
 
         val latch = CountDownLatch(1)
-        val testObserver = Observer<List<Project>> { projects ->
+        val testObserver = Observer<StatefulData<List<Project>>> { projects ->
             run {
                 assertNotNull(projects)
-                assertThat(projects!![0].name, `is`("Project 1"))
-                assertThat(projects[0].description, `is`("Description 1"))
-                assertThat(projects[0].company!!.name, `is`("Company 1"))
-                assertThat(projects[0].logo, `is`("URL 1"))
-                assertThat(projects[0].tags!![0].name, `is`("Tag 1"))
-                assertThat(projects[0].tags!![0].color, `is`("Color 1"))
-                assertThat(projects[0].tags!![1].name, `is`("Tag 2"))
-                assertThat(projects[0].tags!![1].color, `is`("Color 2"))
-                assertThat(projects[1].name, `is`("Project 2"))
-                assertThat(projects[1].description, `is`("Description 2"))
-                assertThat(projects[1].company!!.name, `is`("Company 2"))
-                assertThat(projects[1].logo, `is`("URL 2"))
-                assertThat(projects[1].tags!![0].name, `is`("Tag 3"))
-                assertThat(projects[1].tags!![0].color, `is`("Color 3"))
-                assertThat(projects[1].tags!![1].name, `is`("Tag 4"))
-                assertThat(projects[1].tags!![1].color, `is`("Color 4"))
+                assertThat(projects!!.data!![0].name, `is`("Project 1"))
+                assertThat(projects.data!![0].description, `is`("Description 1"))
+                assertThat(projects.data!![0].company!!.name, `is`("Company 1"))
+                assertThat(projects.data!![0].logo, `is`("URL 1"))
+                assertThat(projects.data!![0].tags!![0].name, `is`("Tag 1"))
+                assertThat(projects.data!![0].tags!![0].color, `is`("Color 1"))
+                assertThat(projects.data!![0].tags!![1].name, `is`("Tag 2"))
+                assertThat(projects.data!![0].tags!![1].color, `is`("Color 2"))
+                assertThat(projects.data!![1].name, `is`("Project 2"))
+                assertThat(projects.data!![1].description, `is`("Description 2"))
+                assertThat(projects.data!![1].company!!.name, `is`("Company 2"))
+                assertThat(projects.data!![1].logo, `is`("URL 2"))
+                assertThat(projects.data!![1].tags!![0].name, `is`("Tag 3"))
+                assertThat(projects.data!![1].tags!![0].color, `is`("Color 3"))
+                assertThat(projects.data!![1].tags!![1].name, `is`("Tag 4"))
+                assertThat(projects.data!![1].tags!![1].color, `is`("Color 4"))
                 latch.countDown()
             }
         }

@@ -16,7 +16,7 @@ import org.junit.runner.RunWith
 
 
 /**
- * This class is meant to test the possibles scenarios that the ProjectDao may face
+ * This class is meant to test the possibles scenarios that the ProjectDao, TagDao and ProjectTagDao may face
  */
 @RunWith(AndroidJUnit4::class)
 class ProjectDaoTest {

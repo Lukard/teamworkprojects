@@ -6,8 +6,8 @@ import com.rubenabad.teamworkprojects.db.RoomContract
 
 @Entity(tableName = RoomContract.TABLE_TAG)
 data class TagEntity(
-        val name: String,
-        val color: String
+        val name: String?,
+        val color: String?
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

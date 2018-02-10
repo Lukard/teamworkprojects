@@ -2,6 +2,7 @@ package com.rubenabad.teamworkprojects.view.item
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.support.v7.widget.CardView
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -9,11 +10,11 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.github.florent37.glidepalette.BitmapPalette
-import com.github.florent37.glidepalette.GlidePalette
+import com.bumptech.glide.request.RequestOptions.bitmapTransform
 import com.rubenabad.teamworkprojects.R
 import com.rubenabad.teamworkprojects.data.Project
 import com.rubenabad.teamworkprojects.utils.extensions.px
+import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.android.synthetic.main.item_project.view.*
 
 class ProjectItemView @JvmOverloads constructor(
@@ -24,6 +25,9 @@ class ProjectItemView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.item_project, this, true)
         layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT)
         useCompatPadding = true
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            preventCornerOverlap = false
+        }
         radius = 10f.px
         cardElevation = 4f.px
     }
@@ -37,14 +41,10 @@ class ProjectItemView @JvmOverloads constructor(
     }
 
     private fun setLogo(project: Project) {
-        if (project.logo != null) {
+        if (project.logo != null && logo != null) {
             Glide.with(this)
                     .load(project.logo)
-                    .listener(
-                            GlidePalette.with(project.logo)
-                                    .use(BitmapPalette.Profile.VIBRANT_LIGHT)
-                                    .intoBackground(transparency)
-                    )
+                    .apply(bitmapTransform(BlurTransformation(25)))
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .into(logo)
         }
@@ -64,6 +64,8 @@ class ProjectItemView @JvmOverloads constructor(
 
     private fun setTags(project: Project) {
         if (project.tags != null) {
+            tags.visibility = VISIBLE
+            tags.removeAllViews()
             project.tags.forEach { tag ->
                 val tagView = TagView(context)
                 tagView.apply {

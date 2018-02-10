@@ -1,7 +1,7 @@
 package com.rubenabad.teamworkprojects.di
 
 import com.rubenabad.teamworkprojects.BuildConfig
-import com.rubenabad.teamworkprojects.api.ProjectsApi
+import com.rubenabad.teamworkprojects.api.WebserviceDatasource
 import com.rubenabad.teamworkprojects.db.DatabaseDataSource
 import com.rubenabad.teamworkprojects.repository.ProjectsRepository
 import com.rubenabad.teamworkprojects.repository.ProjectsRepositoryImpl
@@ -18,9 +18,9 @@ val appModule = applicationContext {
 
     viewModel { ProjectListViewModel(get()) }
 
-    bean { ProjectsRepositoryImpl(get()) as ProjectsRepository }
+    bean { ProjectsRepositoryImpl(get(), get()) as ProjectsRepository }
 
-    bean { createWebService<ProjectsApi>(teamworkURL, apiKey) }
+    bean { createWebService<WebserviceDatasource>(teamworkURL, apiKey) }
 
     bean { DatabaseDataSource.build(get()) }
 

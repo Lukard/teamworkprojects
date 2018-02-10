@@ -4,7 +4,7 @@ import com.rubenabad.teamworkprojects.data.ProjectsResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 
-interface ProjectsApi {
+interface WebserviceDatasource {
 
     @GET("projects.json")
     fun getProjects(): Single<ProjectsResponse>

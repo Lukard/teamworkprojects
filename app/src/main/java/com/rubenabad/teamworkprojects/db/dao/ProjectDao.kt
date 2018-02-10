@@ -14,9 +14,15 @@ import io.reactivex.Single
 interface ProjectDao {
 
     @Insert
+    fun insert(project: ProjectEntity): Long
+
+    @Insert
     fun insertAll(projects: List<ProjectEntity>): List<Long>
 
     @Query(RoomContract.SELECT_ALL_PROJECTS)
     fun getAllProjects(): Single<List<ProjectEntity>>
+
+    @Query("DELETE FROM project")
+    fun deleteAll()
 
 }

@@ -7,8 +7,16 @@ import com.rubenabad.teamworkprojects.db.RoomContract
 
 @Entity(tableName = RoomContract.TABLE_PROJECT_TAG,
         foreignKeys = [
-            ForeignKey(entity = ProjectEntity::class, parentColumns = ["id"], childColumns = ["project"]),
-            ForeignKey(entity = TagEntity::class, parentColumns = ["id"], childColumns = ["tag"])
+            ForeignKey(
+                    entity = ProjectEntity::class,
+                    parentColumns = ["id"],
+                    childColumns = ["project"],
+                    onDelete = ForeignKey.CASCADE),
+            ForeignKey(
+                    entity = TagEntity::class,
+                    parentColumns = ["id"],
+                    childColumns = ["tag"],
+                    onDelete = ForeignKey.CASCADE)
         ]
 )
 data class ProjectTagEntity(

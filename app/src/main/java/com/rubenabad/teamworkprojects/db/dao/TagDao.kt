@@ -14,9 +14,14 @@ import io.reactivex.Single
 interface TagDao {
 
     @Insert
-    fun insertAll(projects: List<TagEntity>): List<Long>
+    fun insert(tag: TagEntity): Long
+
+    @Insert
+    fun insertAll(tags: List<TagEntity>): List<Long>
 
     @Query(RoomContract.SELECT_ALL_TAGS + " WHERE id IN (:ids)")
     fun getTagsById(ids: List<Long>): Single<List<TagEntity>>
 
+    @Query("DELETE FROM tag")
+    fun deleteAll()
 }
