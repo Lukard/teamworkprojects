@@ -2,82 +2,25 @@ package com.rubenabad.teamworkprojects.repository
 
 import com.rubenabad.teamworkprojects.api.ProjectsResponse
 import com.rubenabad.teamworkprojects.api.WebserviceDataSource
-import com.rubenabad.teamworkprojects.data.Company
 import com.rubenabad.teamworkprojects.data.Project
-import com.rubenabad.teamworkprojects.data.Tag
-import com.rubenabad.teamworkprojects.db.DatabaseDataSource
-import com.rubenabad.teamworkprojects.db.entity.ProjectEntity
-import com.rubenabad.teamworkprojects.db.entity.ProjectTagEntity
-import com.rubenabad.teamworkprojects.db.entity.TagEntity
+import com.rubenabad.teamworkprojects.db.service.ProjectDatabaseService
 import io.reactivex.Flowable
 import io.reactivex.Single
 
 class ProjectsRepositoryImpl(
         private val webserviceDataSource: WebserviceDataSource,
-        private val databaseDataSource: DatabaseDataSource) : ProjectsRepository {
+        private val databaseDataSource: ProjectDatabaseService) : ProjectsRepository {
 
     override fun getProjects(): Flowable<List<Project>> =
             Single.concatArray(getProjectsFromDB(), getProjectsFromWebservice())
 
     private fun getProjectsFromWebservice(): Single<List<Project>> =
-            webserviceDataSource
-                    .getProjects()
-                    .map {
-                        refreshDatabase(it)
-                    }
+            webserviceDataSource.getProjects().map { refreshDatabase(it) }
 
-    private fun getProjectsFromDB() =
-            databaseDataSource
-                    .projectDao()
-                    .getAllProjects()
-                    .flattenAsObservable { projects -> projects }
-                    .flatMap { project ->
-                        databaseDataSource
-                                .projectTagDao()
-                                .getProjectTagsById(project.id)
-                                .map { projectTags -> Pair(project, projectTags) }
-                                .flatMap { projectTags ->
-                                    databaseDataSource
-                                            .tagDao()
-                                            .getTagsById(projectTags.second.map { it.tag })
-                                            .map { tags ->
-                                                Project(
-                                                        projectTags.first.webId,
-                                                        projectTags.first.name,
-                                                        projectTags.first.description,
-                                                        Company(projectTags.first.company),
-                                                        projectTags.first.logo,
-                                                        tags.map { Tag(it.name, it.color) }
-
-                                                )
-                                            }
-                                }
-                                .toObservable()
-                    }
-                    .toList()
+    private fun getProjectsFromDB(): Single<List<Project>> = databaseDataSource.getAllProjects()
 
     private fun refreshDatabase(response: ProjectsResponse): List<Project> {
-        databaseDataSource.projectTagDao().deleteAll()
-        databaseDataSource.projectDao().deleteAll()
-        databaseDataSource.tagDao().deleteAll()
-        response.projects?.let { projects ->
-            projects.forEach { project ->
-                val projectId = databaseDataSource
-                        .projectDao()
-                        .insert(ProjectEntity(project.name, project.description, project.company?.name, project.logo,
-                                project.id))
-
-                project.tags?.forEach { tag ->
-                    val tagId = databaseDataSource
-                            .tagDao()
-                            .insert(TagEntity(tag.name, tag.color))
-
-                    databaseDataSource
-                            .projectTagDao()
-                            .insert(ProjectTagEntity(projectId, tagId))
-                }
-            }
-        }
+        response.projects?.let { databaseDataSource.refreshProjects(it) }
         return response.projects ?: emptyList()
     }
 

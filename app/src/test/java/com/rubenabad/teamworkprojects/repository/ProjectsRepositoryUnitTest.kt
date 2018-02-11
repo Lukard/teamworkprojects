@@ -1,116 +1,64 @@
 package com.rubenabad.teamworkprojects.repository
 
+import com.nhaarman.mockito_kotlin.anyArray
+import com.nhaarman.mockito_kotlin.doAnswer
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
 import com.rubenabad.teamworkprojects.api.ProjectsResponse
+import com.rubenabad.teamworkprojects.api.WebserviceDataSource
 import com.rubenabad.teamworkprojects.data.Company
 import com.rubenabad.teamworkprojects.data.Project
 import com.rubenabad.teamworkprojects.data.Tag
+import com.rubenabad.teamworkprojects.db.service.ProjectDatabaseService
 import io.reactivex.Single
-
+import io.reactivex.subscribers.TestSubscriber
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Test
 
 /**
  * This class is meant to test the possibles scenarios that the @see ProjectsRepository may face
  */
 class ProjectsRepositoryUnitTest {
 
-    private val okCall = Single.just(
-            ProjectsResponse("OK",
-                    listOf(
-                            Project(1, "Project 1", "Description 1", Company("Company 1"),
-                                    "URL 1", listOf(Tag("Tag 1", "Color 1"),
-                                    Tag("Tag 2", "Color 2")) ),
-                            Project(2, "Project 2", "Description 2", Company("Company 2"),
-                                    "URL 2", listOf(Tag("Tag 3", "Color 3"),
-                                    Tag("Tag 4", "Color 4")))
-                    )
-            )
+    private val projects = listOf(
+            Project(1, "Project 1", "Description 1", Company("Company 1"),
+                    "URL 1", listOf(Tag("Tag 1", "Color 1"),
+                    Tag("Tag 2", "Color 2"))),
+            Project(2, "Project 2", "Description 2", Company("Company 2"),
+                    "URL 2", listOf(Tag("Tag 3", "Color 3"),
+                    Tag("Tag 4", "Color 4")))
     )
 
-    private val secondOkCall = Single.just(
-            ProjectsResponse("OK", listOf(
-                    Project(3, "Project 3", "Description 3", Company("Company 3"),
-                            "URL 3", listOf(Tag("Tag 5", "Color 5"),
-                            Tag("Tag 6", "Color 6"))),
-                    Project(4, "Project 4", "Description 4", Company("Company 4"),
-                            "URL 4", listOf(Tag("Tag 7", "Color 7"),
-                            Tag("Tag 8", "Color 8")))
-            )
-            )
-    )
+    @Test
+    fun getProjectsFromWebService() {
+        val webserviceMock = mock<WebserviceDataSource> {
+            on { getProjects() } doReturn Single.just(ProjectsResponse("OK", projects))
+        }
 
-//    @Test
-//    fun getProjectsFromWebService() {
-//        val projectsMock = mock<WebserviceDataSource> {
-//            on { getProjects() } doReturn okCall
-//        }
-//
-//        val testSubscriber: TestSubscriber<List<Project>> = TestSubscriber()
-//        val repository = ProjectsRepositoryImpl(projectsMock)
-//        repository.getProjects().subscribe(testSubscriber)
-//
-//        testSubscriber.assertComplete()
-//        testSubscriber.assertNoErrors()
-//        testSubscriber.assertValueCount(1)
-//        val projectResponse = testSubscriber.values()[0]
-//        assertThat(projectResponse.size, `is`(2))
-//        assertThat(projectResponse[0].name, `is`("Project 1"))
-//        assertThat(projectResponse[0].logo, `is`("URL 1"))
-//        assertThat(projectResponse[1].name, `is`("Project 2"))
-//        assertThat(projectResponse[1].logo, `is`("URL 2"))
-//    }
-//
-//    @Test
-//    fun getProjectsFromCacheAndUpdateFromWebservice() {
-//        val projectsMock = mock<WebserviceDataSource> {
-//            on { getProjects() } doReturn (listOf(okCall, secondOkCall))
-//        }
-//
-//        val testSubscriber: TestSubscriber<List<Project>> = TestSubscriber()
-//        val repository = ProjectsRepositoryImpl(projectsMock)
-//        repository.getProjects().subscribe(testSubscriber)
-//
-//        testSubscriber.assertComplete()
-//        testSubscriber.assertNoErrors()
-//        testSubscriber.assertValueCount(1)
-//        val projectResponse = testSubscriber.values()[0]
-//        assertThat(projectResponse.size, `is`(2))
-//        assertThat(projectResponse[0].name, `is`("Project 1"))
-//        assertThat(projectResponse[0].logo, `is`("URL 1"))
-//        assertThat(projectResponse[1].name, `is`("Project 2"))
-//        assertThat(projectResponse[1].logo, `is`("URL 2"))
-//
-//        val testSubscriber2: TestSubscriber<List<Project>> = TestSubscriber()
-//        repository.getProjects().subscribe(testSubscriber2)
-//
-//        testSubscriber2.awaitTerminalEvent()
-//
-//        testSubscriber2.assertValueCount(2)
-//        var projectResponse2 = testSubscriber2.values()[0]
-//        assertThat(projectResponse2.size, `is`(2))
-//        assertThat(projectResponse2[0].name, `is`("Project 1"))
-//        assertThat(projectResponse2[0].logo, `is`("URL 1"))
-//        assertThat(projectResponse2[1].name, `is`("Project 2"))
-//        assertThat(projectResponse2[1].logo, `is`("URL 2"))
-//        projectResponse2 = testSubscriber2.values()[1]
-//        assertThat(projectResponse2.size, `is`(2))
-//        assertThat(projectResponse2[0].name, `is`("Project 3"))
-//        assertThat(projectResponse2[0].logo, `is`("URL 3"))
-//        assertThat(projectResponse2[1].name, `is`("Project 4"))
-//        assertThat(projectResponse2[1].logo, `is`("URL 4"))
-//    }
-//
-//    @Test
-//    fun failIfThereIsNoCachedProjectsAndFirstCallFail() {
-//        val exception = RuntimeException("What a terrible failure! We could not properly get projects!")
-//
-//        val projectsMock = mock<WebserviceDataSource> {
-//            on { getProjects() } doReturn Single.error(exception)
-//        }
-//
-//        val testSubscriber: TestSubscriber<List<Project>> = TestSubscriber()
-//        val repository = ProjectsRepositoryImpl(projectsMock)
-//        repository.getProjects().subscribe(testSubscriber)
-//
-//        testSubscriber.assertError(exception)
-//    }
+        val databaseMock = mock<ProjectDatabaseService> {
+            on { getAllProjects() } doReturn Single.just(projects)
+            val anylist = anyArray<Project>().toList()
+            on { refreshProjects(anylist) } doAnswer {}
+        }
+
+        val testSubscriber: TestSubscriber<List<Project>> = TestSubscriber()
+        val repository = ProjectsRepositoryImpl(webserviceMock, databaseMock)
+        repository.getProjects().subscribe(testSubscriber)
+
+        testSubscriber.assertComplete()
+        testSubscriber.assertNoErrors()
+        testSubscriber.assertValueCount(2)
+        val projectResponse = testSubscriber.values()[0]
+        assertThat(projectResponse.size, `is`(2))
+        projectResponse.forEachIndexed { index, project ->
+            assertThat(project.id, `is`((index+1).toLong()))
+            assertThat(project.name, `is`("Project ${index+1}"))
+            assertThat(project.description, `is`("Description ${index+1}"))
+            assertThat(project.company!!.name, `is`("Company ${index+1}"))
+            assertThat(project.logo, `is`("URL ${index+1}"))
+            assertThat(project.tags, `is`((1..2).map { Tag("Tag ${index*2 + it}", "Color ${index*2 + it}") }))
+        }
+    }
 
 }

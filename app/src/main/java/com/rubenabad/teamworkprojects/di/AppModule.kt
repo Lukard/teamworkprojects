@@ -3,6 +3,8 @@ package com.rubenabad.teamworkprojects.di
 import com.rubenabad.teamworkprojects.BuildConfig
 import com.rubenabad.teamworkprojects.api.WebserviceDataSource
 import com.rubenabad.teamworkprojects.db.DatabaseDataSource
+import com.rubenabad.teamworkprojects.db.service.ProjectDatabaseService
+import com.rubenabad.teamworkprojects.db.service.ProjectDatabaseServiceImpl
 import com.rubenabad.teamworkprojects.repository.ProjectsRepository
 import com.rubenabad.teamworkprojects.repository.ProjectsRepositoryImpl
 import com.rubenabad.teamworkprojects.repository.TaskRepository
@@ -27,6 +29,7 @@ val appModule = applicationContext {
 
     bean { createWebService<WebserviceDataSource>(teamworkURL, apiKey) }
 
+    bean { ProjectDatabaseServiceImpl(get()) as ProjectDatabaseService }
     bean { DatabaseDataSource.build(get()) }
 
 }
