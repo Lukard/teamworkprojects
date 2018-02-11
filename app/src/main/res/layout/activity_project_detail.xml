@@ -93,7 +93,9 @@
             android:layout_marginStart="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/taskListTitle"/>
+            app:layout_constraintTop_toBottomOf="@+id/taskListTitle"
+            android:nestedScrollingEnabled="false"
+            tools:targetApi="lollipop"/>
 
     </android.support.constraint.ConstraintLayout>
 

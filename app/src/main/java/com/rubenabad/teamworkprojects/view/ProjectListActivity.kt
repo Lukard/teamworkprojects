@@ -20,7 +20,7 @@ import org.jetbrains.anko.startActivity
 import org.koin.android.architecture.ext.viewModel
 
 
-class MainActivity : AppCompatActivity() {
+class ProjectListActivity : AppCompatActivity() {
 
     private val viewModel: ProjectListViewModel by viewModel()
 
@@ -42,9 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getAllProjects().observe(this, Observer { stateData ->
             when (stateData!!.state) {
-                State.START_LOADING -> showLoading()
-                State.END_LOADING -> hideLoading()
-                State.SUCCESS -> (recycler.adapter as ProjectAdapter).items = stateData.data!!
+                State.LOADING -> showLoading()
+                State.SUCCESS -> showProjects(stateData.data!!)
                 State.ERROR -> showError()
             }
         })
@@ -54,7 +53,13 @@ class MainActivity : AppCompatActivity() {
         startActivity<ProjectDetailActivity>("project" to project)
     }
 
+    private fun showProjects(projectList: List<Project>) {
+        hideLoading()
+        (recycler.adapter as ProjectAdapter).items = projectList
+    }
+
     private fun showError() {
+        hideLoading()
         if (recycler.adapter.itemCount == 0) {
             showFirstTimeError()
         } else {

@@ -24,10 +24,7 @@ class ProjectListViewModel(private val repository: ProjectsRepository) : ViewMod
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    projects.value = StatefulData(State.START_LOADING)
-                }
-                .doOnTerminate {
-                    projects.value = StatefulData(State.END_LOADING)
+                    projects.value = StatefulData(State.LOADING)
                 }
                 .subscribe({
                     projects.value = StatefulData(State.SUCCESS, data = it)

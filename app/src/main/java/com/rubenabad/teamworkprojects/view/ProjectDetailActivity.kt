@@ -49,8 +49,7 @@ class ProjectDetailActivity : AppCompatActivity() {
         viewModel.getTasks(project.id).observe(this, Observer {
             it?.apply {
                 when (state) {
-                    START_LOADING -> {}
-                    END_LOADING -> {}
+                    LOADING -> {}
                     SUCCESS -> (recycler.adapter as TaskAdapter).items = data!!
                     ERROR -> error?.printStackTrace()
                 }

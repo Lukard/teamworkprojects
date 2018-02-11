@@ -32,7 +32,8 @@ class ProjectDaoTest {
                 "Project $it",
                 "Description $it",
                 "Company $it",
-                "URL $it")
+                "URL $it",
+                it.toLong())
     }
 
     private val tags = (1..2).map {
@@ -92,7 +93,8 @@ class ProjectDaoTest {
                                 project.name == projects[index].name &&
                                 project.description == projects[index].description &&
                                 project.company == projects[index].company &&
-                                project.logo == projects[index].logo
+                                project.logo == projects[index].logo &&
+                                project.webId == projects[index].webId
                         if (!sameProjects) return@forEachIndexed
                     }
                     sameProjects

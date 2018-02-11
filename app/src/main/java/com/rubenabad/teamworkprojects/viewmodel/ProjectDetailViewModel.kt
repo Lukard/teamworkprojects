@@ -21,10 +21,7 @@ class ProjectDetailViewModel(private val repository: TaskRepository) : ViewModel
                     .observeOn(AndroidSchedulers.mainThread())
                     .toFlowable()
                     .doOnSubscribe {
-                        tasks.value = StatefulData(State.START_LOADING)
-                    }
-                    .doOnTerminate {
-                        tasks.value = StatefulData(State.END_LOADING)
+                        tasks.value = StatefulData(State.LOADING)
                     }
                     .subscribe({
                         tasks.value = StatefulData(State.SUCCESS, data = it)
