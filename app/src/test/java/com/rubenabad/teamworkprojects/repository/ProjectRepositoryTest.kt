@@ -19,7 +19,7 @@ import org.junit.Test
 /**
  * This class is meant to test the possibles scenarios that the @see ProjectsRepository may face
  */
-class ProjectsRepositoryUnitTest {
+class ProjectRepositoryTest {
 
     private val projects = listOf(
             Project(1, "Project 1", "Description 1", Company("Company 1"),
