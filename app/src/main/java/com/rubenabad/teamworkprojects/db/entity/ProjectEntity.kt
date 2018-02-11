@@ -9,7 +9,8 @@ data class ProjectEntity(
         val name: String?,
         val description: String?,
         val company: String?,
-        val logo: String?
+        val logo: String?,
+        val webId: Long
 ) {
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 }

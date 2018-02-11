@@ -7,10 +7,11 @@ import com.rubenabad.teamworkprojects.utils.readTypedObjectCompat
 import com.rubenabad.teamworkprojects.utils.writeTypedObjectCompat
 
 
-data class Project(val name: String?, val description: String?, val company: Company?, val logo: String?,
+data class Project(val id: Long, val name: String?, val description: String?, val company: Company?, val logo: String?,
                    val tags: List<Tag>?) : KParcelable {
 
     constructor(parcel: Parcel) : this(
+            parcel.readLong(),
             parcel.readString(),
             parcel.readString(),
             parcel.readTypedObjectCompat(Company.CREATOR),
@@ -18,6 +19,7 @@ data class Project(val name: String?, val description: String?, val company: Com
             arrayListOf<Tag>().apply { parcel.readTypedList(this, Tag.CREATOR) })
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeLong(id)
         writeString(name)
         writeString(description)
         writeTypedObjectCompat(company, flags)

@@ -1,7 +1,7 @@
 package com.rubenabad.teamworkprojects.repository
 
 import com.rubenabad.teamworkprojects.api.ProjectsResponse
-import com.rubenabad.teamworkprojects.api.WebserviceDatasource
+import com.rubenabad.teamworkprojects.api.WebserviceDataSource
 import com.rubenabad.teamworkprojects.data.Company
 import com.rubenabad.teamworkprojects.data.Project
 import com.rubenabad.teamworkprojects.data.Tag
@@ -13,14 +13,14 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 
 class ProjectsRepositoryImpl(
-        private val webserviceDatasource: WebserviceDatasource,
+        private val webserviceDataSource: WebserviceDataSource,
         private val databaseDataSource: DatabaseDataSource) : ProjectsRepository {
 
     override fun getProjects(): Flowable<List<Project>> =
             Single.concatArray(getProjectsFromDB(), getProjectsFromWebservice())
 
     private fun getProjectsFromWebservice(): Single<List<Project>> =
-            webserviceDatasource
+            webserviceDataSource
                     .getProjects()
                     .map {
                         refreshDatabase(it)
@@ -36,17 +36,19 @@ class ProjectsRepositoryImpl(
                                 .projectTagDao()
                                 .getProjectTagsById(project.id)
                                 .map { projectTags -> Pair(project, projectTags) }
-                                .flatMap { projectProjectTags ->
+                                .flatMap { projectTags ->
                                     databaseDataSource
                                             .tagDao()
-                                            .getTagsById(projectProjectTags.second.map { it.tag })
+                                            .getTagsById(projectTags.second.map { it.tag })
                                             .map { tags ->
                                                 Project(
-                                                        projectProjectTags.first.name,
-                                                        projectProjectTags.first.description,
-                                                        Company(projectProjectTags.first.company),
-                                                        projectProjectTags.first.logo,
+                                                        projectTags.first.webId,
+                                                        projectTags.first.name,
+                                                        projectTags.first.description,
+                                                        Company(projectTags.first.company),
+                                                        projectTags.first.logo,
                                                         tags.map { Tag(it.name, it.color) }
+
                                                 )
                                             }
                                 }
@@ -62,7 +64,8 @@ class ProjectsRepositoryImpl(
             projects.forEach { project ->
                 val projectId = databaseDataSource
                         .projectDao()
-                        .insert(ProjectEntity(project.name, project.description, project.company?.name, project.logo))
+                        .insert(ProjectEntity(project.name, project.description, project.company?.name, project.logo,
+                                project.id))
 
                 project.tags?.forEach { tag ->
                     val tagId = databaseDataSource
