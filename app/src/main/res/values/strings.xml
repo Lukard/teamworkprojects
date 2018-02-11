@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Teamwork Projects</string>
+    <string name="app_name">Yak Projects</string>
     <string name="unknown_project_name">Unnamed project</string>
     <string name="first_time_projects_download">Your projects information is downloading.</string>
     <string name="error_retrieve_projects">Ooooops! Check your internet connection and</string>
