@@ -1,4 +1,4 @@
-package com.rubenabad.teamworkprojects.db.service
+package com.rubenabad.teamworkprojects.db.service.db.service
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.persistence.room.Room
@@ -8,6 +8,8 @@ import com.rubenabad.teamworkprojects.data.Company
 import com.rubenabad.teamworkprojects.data.Project
 import com.rubenabad.teamworkprojects.data.Tag
 import com.rubenabad.teamworkprojects.db.DatabaseDataSource
+import com.rubenabad.teamworkprojects.db.service.ProjectDatabaseService
+import com.rubenabad.teamworkprojects.db.service.ProjectDatabaseServiceImpl
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

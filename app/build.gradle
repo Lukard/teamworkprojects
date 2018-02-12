@@ -62,6 +62,7 @@ dependencies {
     ext.mockitokotlin_version = "1.5.0"
     ext.koin_version = "0.8.2"
     ext.stetho_version = "1.5.0"
+    ext.barista_version = "2.3.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -123,6 +124,10 @@ dependencies {
     testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockitokotlin_version"
     testImplementation "android.arch.core:core-testing:$viewmodel_livedata_version"
     androidTestImplementation "android.arch.core:core-testing:$viewmodel_livedata_version"
+    androidTestCompile("com.schibsted.spain:barista:$barista_version") {
+        exclude group: 'com.android.support'
+        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
+    }
 
     implementation "com.facebook.stetho:stetho:$stetho_version"
 }
